@@ -24,7 +24,6 @@ impl NnWasm {
     #[wasm_bindgen(constructor)]
     pub fn new(circuit: &Halo2Wasm) -> Self {
         let gate = GateChip::new();
-        let lookup_bits = circuit.circuit_params.clone().unwrap().lookup_bits.unwrap();
         NnWasm {
             gate,
             builder: Arc::clone(&circuit.circuit),
@@ -120,6 +119,8 @@ impl NnWasm {
 
         // l2.iter().map(|x| format!("{:?}", x.value())).collect()
         l2.iter()
-            .fold(String::new(), |acc, x| acc + &format!("{:?}\n", x.value()))
+            .map(|x| format!("{:?}", x.value()))
+            .collect::<Vec<String>>()
+            .join("\n")
     }
 }
